@@ -395,6 +395,20 @@ export function keyDownOn(target, keyCode, modifiers, key) {
 }
 
 /**
+ * Fires a 'keypress' event on a specific node. This event bubbles and is
+ * cancellable.
+ *
+ * @param {!Element} target The node to fire the event on.
+ * @param {number} keyCode The keyCode for the event.
+ * @param {(string|Array<string>)=} modifiers The key modifiers for the event.
+ *     Accepted values are shift, ctrl, alt, meta.
+ * @param {string=} key The KeyboardEvent.key value for the event.
+ */
+export function keyPressOn(target, keyCode, modifiers, key) {
+  keyEventOn(target, "keypress", keyCode, modifiers, key);
+}
+
+/**
  * Fires a 'keyup' event on a specific node. This event bubbles and is
  * cancellable.
  *
@@ -420,8 +434,13 @@ export function keyUpOn(target, keyCode, modifiers, key) {
  */
 export function pressAndReleaseKeyOn(target, keyCode, modifiers, key) {
   keyDownOn(target, keyCode, modifiers, key);
+
   Base.async(function() {
-    keyUpOn(target, keyCode, modifiers, key);
+    keyPressOn(target, keyCode, modifiers, key);
+
+    Base.async(function() {
+      keyUpOn(target, keyCode, modifiers, key);
+    }, 1);
   }, 1);
 }
 
@@ -432,7 +451,7 @@ export function pressAndReleaseKeyOn(target, keyCode, modifiers, key) {
  * @param {!Element} target The node to fire the event on.
  */
 export function pressEnter(target) {
-  pressAndReleaseKeyOn(target, 13);
+  pressAndReleaseKeyOn(target, 13, [], "Enter");
 }
 
 /**
@@ -451,6 +470,7 @@ export function pressSpace(target) {
  * directly from this module instead of accessing them via the global.
  */
 window.MockInteractions = {
+  click,
   middleOfNode,
   topLeftOfNode,
   makeTouches,
@@ -470,6 +490,7 @@ window.MockInteractions = {
   keyboardEventFor,
   keyEventOn,
   keyDownOn,
+  keyPressOn,
   keyUpOn,
   pressAndReleaseKeyOn,
   pressEnter,
