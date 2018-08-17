@@ -11,8 +11,8 @@
     "url": "git://github.com/PolymerElements/iron-test-helpers"
   },
   "homepage": "https://github.com/PolymerElements/iron-test-helpers",
-  "name": "@polymer/iron-test-helpers",
-  "version": "3.0.0-pre.20",
+  "name": "@beliantech/iron-test-helpers",
+  "version": "3.0.3",
   "scripts": {
     "format": "webmat",
     "generate-types": "gen-typescript-declarations --deleteExisting --outDir .",
