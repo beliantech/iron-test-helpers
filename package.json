@@ -16,7 +16,8 @@
   "scripts": {
     "format": "webmat",
     "generate-types": "gen-typescript-declarations --deleteExisting --outDir .",
-    "prepack": "npm run generate-types"
+    "_prepack": "npm run generate-types",
+    "submit": "npm publish --access public"
   },
   "main": "iron-test-helpers.js",
   "author": "The Polymer Authors",
