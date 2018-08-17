@@ -9,23 +9,21 @@
  * rights grant found at http://polymer.github.io/PATENTS.txt
  */
 
-import {Base} from '@polymer/polymer/polymer-legacy.js';
+import { Base } from "@polymer/polymer/polymer-legacy.js";
 
 const HAS_NEW_MOUSE = (() => {
   let has = false;
   try {
-    has = Boolean(new MouseEvent('x'));
-  } catch (_) {
-  }
+    has = Boolean(new MouseEvent("x"));
+  } catch (_) {}
   return has;
 })();
 
 const HAS_NEW_TOUCH = (() => {
   let has = false;
   try {
-    has = Boolean(new TouchEvent('x'));
-  } catch (_) {
-  }
+    has = Boolean(new TouchEvent("x"));
+  } catch (_) {}
   return has;
 })();
 
@@ -36,7 +34,7 @@ const HAS_NEW_TOUCH = (() => {
  */
 export function middleOfNode(node) {
   const bcr = node.getBoundingClientRect();
-  return {y: bcr.top + (bcr.height / 2), x: bcr.left + (bcr.width / 2)};
+  return { y: bcr.top + bcr.height / 2, x: bcr.left + bcr.width / 2 };
 }
 
 /**
@@ -46,7 +44,7 @@ export function middleOfNode(node) {
  */
 export function topLeftOfNode(node) {
   const bcr = node.getBoundingClientRect();
-  return {y: bcr.top, x: bcr.left};
+  return { y: bcr.top, x: bcr.left };
 }
 
 /**
@@ -62,8 +60,7 @@ export function makeTouches(xyList, node) {
   let id = 0;
 
   return xyList.map(function(xy) {
-    var touchInit =
-        {identifier: id++, target: node, clientX: xy.x, clientY: xy.y};
+    var touchInit = { identifier: id++, target: node, clientX: xy.x, clientY: xy.y };
 
     return HAS_NEW_TOUCH ? new window.Touch(touchInit) : touchInit;
   });
@@ -126,30 +123,30 @@ export function makeMouseEvent(type, xy, node) {
     // Allow event to go outside a ShadowRoot.
     composed: true,
     // Make this a primary input.
-    buttons:
-        1  // http://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/buttons
+    buttons: 1 // http://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/buttons
   };
   let e;
   if (HAS_NEW_MOUSE) {
     e = new MouseEvent(type, props);
   } else {
-    e = document.createEvent('MouseEvent');
+    e = document.createEvent("MouseEvent");
     e.initMouseEvent(
-        type,
-        props.bubbles,
-        props.cancelable,
-        null, /* view */
-        null, /* detail */
-        0,    /* screenX */
-        0,    /* screenY */
-        props.clientX,
-        props.clientY,
-        false, /*ctrlKey */
-        false, /*altKey */
-        false, /*shiftKey */
-        false, /*metaKey */
-        0,     /*button */
-        null /*relatedTarget*/);
+      type,
+      props.bubbles,
+      props.cancelable,
+      null /* view */,
+      null /* detail */,
+      0 /* screenX */,
+      0 /* screenY */,
+      props.clientX,
+      props.clientY,
+      false /*ctrlKey */,
+      false /*altKey */,
+      false /*shiftKey */,
+      false /*metaKey */,
+      0 /*button */,
+      null /*relatedTarget*/
+    );
   }
   node.dispatchEvent(e);
 }
@@ -168,13 +165,13 @@ export function move(node, fromXY, toXY, steps) {
   steps = steps || 5;
   var dx = Math.round((fromXY.x - toXY.x) / steps);
   var dy = Math.round((fromXY.y - toXY.y) / steps);
-  var xy = {x: fromXY.x, y: fromXY.y};
+  var xy = { x: fromXY.x, y: fromXY.y };
   for (var i = steps; i > 0; i--) {
-    makeMouseEvent('mousemove', xy, node);
+    makeMouseEvent("mousemove", xy, node);
     xy.x += dx;
     xy.y += dy;
   }
-  makeMouseEvent('mousemove', {x: toXY.x, y: toXY.y}, node);
+  makeMouseEvent("mousemove", { x: toXY.x, y: toXY.y }, node);
 }
 
 /**
@@ -193,7 +190,7 @@ export function track(target, dx, dy, steps) {
   steps = steps || 5;
   down(target);
   var xy = middleOfNode(target);
-  var xy2 = {x: xy.x + dx, y: xy.y + dy};
+  var xy2 = { x: xy.x + dx, y: xy.y + dy };
   move(target, xy, xy2, steps);
   up(target, xy2);
 }
@@ -209,7 +206,7 @@ export function track(target, dx, dy, steps) {
  */
 export function down(node, xy) {
   xy = xy || middleOfNode(node);
-  makeMouseEvent('mousedown', xy, node);
+  makeMouseEvent("mousedown", xy, node);
 }
 
 /**
@@ -223,7 +220,7 @@ export function down(node, xy) {
  */
 export function up(node, xy) {
   xy = xy || middleOfNode(node);
-  makeMouseEvent('mouseup', xy, node);
+  makeMouseEvent("mouseup", xy, node);
 }
 
 /**
@@ -234,7 +231,7 @@ export function up(node, xy) {
  */
 export function click(node, xy) {
   xy = xy || middleOfNode(node);
-  makeMouseEvent('click', xy, node);
+  makeMouseEvent("click", xy, node);
 }
 
 /**
@@ -246,7 +243,7 @@ export function click(node, xy) {
  */
 export function touchstart(node, xy) {
   xy = xy || middleOfNode(node);
-  makeSoloTouchEvent('touchstart', xy, node);
+  makeSoloTouchEvent("touchstart", xy, node);
 }
 
 /**
@@ -257,7 +254,7 @@ export function touchstart(node, xy) {
  */
 export function touchend(node, xy) {
   xy = xy || middleOfNode(node);
-  makeSoloTouchEvent('touchend', xy, node);
+  makeSoloTouchEvent("touchend", xy, node);
 }
 
 /**
@@ -297,7 +294,7 @@ export function downAndUp(target, callback, options) {
  */
 export function tap(node, options) {
   // Respect nodes that are disabled in the UI.
-  if (window.getComputedStyle(node)['pointer-events'] === 'none') {
+  if (window.getComputedStyle(node)["pointer-events"] === "none") {
     return;
   }
 
@@ -319,7 +316,7 @@ export function tap(node, options) {
  * @param {!Element} target The node to fire the event on.
  */
 export function focus(target) {
-  Base.fire('focus', {}, {bubbles: false, node: target});
+  Base.fire("focus", {}, { bubbles: false, node: target });
 }
 
 /**
@@ -328,7 +325,7 @@ export function focus(target) {
  * @param {!Element} target The node to fire the event on.
  */
 export function blur(target) {
-  Base.fire('blur', {}, {bubbles: false, node: target});
+  Base.fire("blur", {}, { bubbles: false, node: target });
 }
 
 /**
@@ -354,13 +351,13 @@ export function keyboardEventFor(type, keyCode, modifiers, key) {
   event.code = keyCode;
 
   modifiers = modifiers || [];
-  if (typeof modifiers === 'string') {
+  if (typeof modifiers === "string") {
     modifiers = [modifiers];
   }
-  event.shiftKey = modifiers.indexOf('shift') !== -1;
-  event.altKey = modifiers.indexOf('alt') !== -1;
-  event.ctrlKey = modifiers.indexOf('ctrl') !== -1;
-  event.metaKey = modifiers.indexOf('meta') !== -1;
+  event.shiftKey = modifiers.indexOf("shift") !== -1;
+  event.altKey = modifiers.indexOf("alt") !== -1;
+  event.ctrlKey = modifiers.indexOf("ctrl") !== -1;
+  event.metaKey = modifiers.indexOf("meta") !== -1;
 
   event.key = key;
 
@@ -394,7 +391,7 @@ export function keyEventOn(target, type, keyCode, modifiers, key) {
  * @param {string=} key The KeyboardEvent.key value for the event.
  */
 export function keyDownOn(target, keyCode, modifiers, key) {
-  keyEventOn(target, 'keydown', keyCode, modifiers, key);
+  keyEventOn(target, "keydown", keyCode, modifiers, key);
 }
 
 /**
@@ -408,7 +405,7 @@ export function keyDownOn(target, keyCode, modifiers, key) {
  * @param {string=} key The KeyboardEvent.key value for the event.
  */
 export function keyUpOn(target, keyCode, modifiers, key) {
-  keyEventOn(target, 'keyup', keyCode, modifiers, key);
+  keyEventOn(target, "keyup", keyCode, modifiers, key);
 }
 
 /**
@@ -476,5 +473,5 @@ window.MockInteractions = {
   keyUpOn,
   pressAndReleaseKeyOn,
   pressEnter,
-  pressSpace,
+  pressSpace
 };
