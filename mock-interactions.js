@@ -446,6 +446,7 @@ export function pressAndReleaseKeyOn(target, keyCode, modifiers, key) {
 
 /**
  * Simulates a complete 'enter' key press by firing a `keydown` keyboard event,
+ * a `keypress` keyboard event,
  * followed by an asynchronous `keyup` event on a specific node.
  *
  * @param {!Element} target The node to fire the event on.
@@ -455,7 +456,19 @@ export function pressEnter(target) {
 }
 
 /**
+ * Simulates a complete 'escape' key press by firing a `keydown` keyboard event,
+ * a `keypress` keyboard event,
+ * followed by an asynchronous `keyup` event on a specific node.
+ *
+ * @param {!Element} target The node to fire the event on.
+ */
+export function pressEscape(target) {
+  pressAndReleaseKeyOn(target, 27, [], "Escape");
+}
+
+/**
  * Simulates a complete 'space' key press by firing a `keydown` keyboard event,
+ * a `keypress` keyboard event,
  * followed by an asynchronous `keyup` event on a specific node.
  *
  * @param {!Element} target The node to fire the event on.
@@ -494,5 +507,6 @@ window.MockInteractions = {
   keyUpOn,
   pressAndReleaseKeyOn,
   pressEnter,
-  pressSpace
+  pressSpace,
+  pressEscape
 };
